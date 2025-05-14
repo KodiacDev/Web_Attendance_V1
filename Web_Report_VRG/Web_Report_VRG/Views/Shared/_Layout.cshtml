@@ -1,0 +1,56 @@
+﻿@using Web_VrgLocNinh.Lib
+@{
+    VM_AccountInfo account = new VM_AccountInfo();
+    if (User.Identity.IsAuthenticated)
+    {
+        account = new VM_AccountInfo()
+                {
+                    userName = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.NameIdentifier)?.Value,
+                    accountId = User.Claims.FirstOrDefault(c => c.Type == "AccountId")?.Value,
+                    fullName = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value,
+                    avatar = User.Claims.FirstOrDefault(c => c.Type == "Avatar")?.Value,
+                    position = User.Claims.FirstOrDefault(c => c.Type == "Position")?.Value,
+                    supplierId = User.Claims.FirstOrDefault(c => c.Type == "SupplierId")?.Value,
+                    supplierName = User.Claims.FirstOrDefault(c => c.Type == "SupplierName")?.Value,
+                    accountType = User.Claims.FirstOrDefault(c => c.Type == "AccountType")?.Value,
+                    currentArea = User.Claims.FirstOrDefault(c => c.Type == "CurrentArea")?.Value,
+                    sessionId = User.Claims.FirstOrDefault(c => c.Type == "SessionId")?.Value,
+                    sessionName = User.Claims.FirstOrDefault(c => c.Type == "SessionName")?.Value,
+                    sessionCode = User.Claims.FirstOrDefault(c => c.Type == "SessionCode")?.Value,
+                };
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta charset="utf-8" />
+    <title>REPORT</title>
+    <partial name="_P_StylesMaster" />
+    @RenderSection("Styles", required: false)
+</head>
+
+<body class="pace-top">
+    <div id="app" class="app app-sidebar-collapsed">
+       
+    </div>
+
+    <footer class="footer_layout_master_signin">
+        <div class="p-1 text-center d-flex">
+            <span class="d-flex align-items-center text-dark px-2">
+                <a href="https://ecotech2a.com/" class="text-decoration-none px-1 text-dark" target="_blank">© 2025 CÔNG NGHỆ ĐƯỢC PHÁT TRIỂN BỞI  <b style="color: #009b5c">ECO</b><b style="color: #ec4c24">TECH 2A</b>, JSC </a> -
+            </span>
+            <div class="menu-img online">
+                <img src="/images/logo-ecotech2a.png" alt="Avatar" style="object-fit:cover;" onerror="this.onerror=null;this.src='/images/avatar.png';">
+            </div>
+        </div>
+    </footer>
+
+    <partial name="_P_ScriptsMaster" />
+    @RenderSection(name: "Scripts", required: false)
+</body>
+</html>
