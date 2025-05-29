@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch Phiên Cạo</title>
+    <!-- Nhúng CSS của FullCalendar -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
+    <!-- Nhúng Bootstrap cho giao diện -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/css/lichcao.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-4">
+        <div id="calendar" class="fc-view-harness fc-view-harness-passive"></div>
+    </div>
+
+    <!-- Modal để hiển thị chi tiết phiên cạo -->
+    <div class="modal fade" id="sessionDetailModal" tabindex="-1" aria-labelledby="sessionDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="sessionDetailModalLabel">Chi Tiết Phiên Cạo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Ngày:</strong> <span id="detailDate"></span></p>
+                    <p><strong>Phiên Cạo:</strong> <span id="detailSession"></span></p>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2">Mã Công Nhân</th>
+                                    <th rowspan="2">Tên Công Nhân</th>
+                                    <th rowspan="2">Tên Lô</th>
+                                    <th colspan="4">Địa Chỉ Lô</th>
+                                </tr>
+                                <tr>
+                                    <th>Thôn/Xóm</th>
+                                    <th>Phường/Xã</th>
+                                    <th>Quận/Huyện</th>
+                                    <th>Tỉnh/Thành phố</th>
+                                </tr>
+                            </thead>
+                            <tbody id="detailTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nhúng JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales/vi.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var calendarEl = document.getElementById('calendar');
+            if (!calendarEl) {
+                console.error("Không tìm thấy phần tử calendar!");
+                return;
+            }
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridWeek', // Mặc định hiển thị chế độ tuần
+                initialDate: '2025-05-26', // Ngày hiện tại (27/05/2025) nằm trong tuần 26/05 - 01/06
+                locale: 'vi', // Việt hóa lịch
+                height: 'auto',
+                customButtons: {
+                    myCustomButton: {
+                        text: 'Thêm',
+                        click: function() {
+                            alert('Chức năng thêm sự kiện!');
+                        }
+                    }
+                },
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridDay,dayGridWeek,dayGridMonth myCustomButton'
+                },
+                views: {
+                    dayGridDay: {
+                        titleFormat: { year: 'numeric', month: 'long', day: 'numeric' }
+                    },
+                    dayGridWeek: {
+                        titleFormat: function(date) {
+                            const start = date.start.marker;
+                            const end = date.end.marker;
+                            const startStr = start.getDate() + '/' + (start.getMonth() + 1) + '/' + start.getFullYear();
+                            const endStr = end.getDate() + '/' + (end.getMonth() + 1) + '/' + end.getFullYear();
+                            return `${startStr} đến ${endStr}`;
+                        }
+                    },
+                    dayGridMonth: {
+                        titleFormat: { year: 'numeric', month: 'long' }
+                    }
+                },
+                buttonText: {
+                    dayGridDay: 'Ngày',
+                    dayGridWeek: 'Tuần',
+                    dayGridMonth: 'Tháng',
+                    today: 'Hôm nay'
+                },
+                firstDay: 1, // Bắt đầu tuần từ thứ Hai
+                dayCellContent: function(arg) {
+                    arg.dayNumberText = arg.dayNumberText.replace('day', '').trim();
+                },
+                dayCellDidMount: function(info) {
+                    // Only apply custom rendering in month view
+                    if (calendar.view.type !== 'dayGridMonth') return;
+
+                    var dateStr = info.date.toISOString().split('T')[0];
+                    var sessions = getSessionsForDate(dateStr);
+                    var cell = info.el.querySelector('.fc-daygrid-day-frame');
+                    if (!cell) {
+                        console.error("Không tìm thấy .fc-daygrid-day-frame cho ngày:", dateStr);
+                        return;
+                    }
+                    var sessionsContainer = document.createElement('div');
+                    sessionsContainer.className = 'sessions-container';
+                    sessionsContainer.style.marginTop = '5px';
+
+                    if (sessions.length > 0) {
+                        sessions.forEach(session => {
+                            var sessionBox = document.createElement('div');
+                            sessionBox.className = `session-box session-${session}`;
+                            sessionBox.textContent = `Phiên ${session}`;
+                            sessionBox.onclick = function() { showSessionDetails(dateStr, session); };
+                            sessionsContainer.appendChild(sessionBox);
+                        });
+                    }
+                    cell.appendChild(sessionsContainer);
+                },
+                events: getEventsForWeekView(),
+                eventClick: function(info) {
+                    // Handle event clicks in day and week views
+                    var dateStr = info.event.extendedProps.dateStr;
+                    var session = info.event.extendedProps.session;
+                    showSessionDetails(dateStr, session);
+                }
+            });
+            calendar.render();
+        });
+
+        function getSessionsForDate(dateStr) {
+            const sessions = {
+                '2025-05-26': ['A'],
+                '2025-05-27': ['B'],
+                '2025-05-28': ['C'],
+                '2025-05-29': ['D'],
+                '2025-05-30': ['A'],
+                '2025-05-31': ['B'],
+                '2025-06-01': ['C']
+            };
+            return sessions[dateStr] || [];
+        }
+
+        function getEventsForWeekView() {
+            const sessions = {
+                '2025-05-26': ['A'],
+                '2025-05-27': ['B'],
+                '2025-05-28': ['C'],
+                '2025-05-29': ['D'],
+                '2025-05-30': ['A'],
+                '2025-05-31': ['B'],
+                '2025-06-01': ['C']
+            };
+
+            const events = [];
+            for (const [date, sessionList] of Object.entries(sessions)) {
+                sessionList.forEach(session => {
+                    events.push({
+                        title: `Phiên ${session}`,
+                        start: `${date}T08:00:00`,
+                        end: `${date}T17:00:00`,
+                        className: `session-${session}`,
+                        extendedProps: {
+                            dateStr: date,
+                            session: session
+                        }
+                    });
+                });
+            }
+            return events;
+        }
+
+        function showSessionDetails(dateStr, session) {
+            const sessionData = {
+                '2025-05-26': {
+                    session: 'A',
+                    workers: [
+                        { maCongNhan: 'CN001', tenCongNhan: 'Nguyễn Văn A', tenLo: 'Lô A', diaChiLo: { thonXom: 'Thôn 1', phuongXa: 'Xã A', quanHuyen: 'Huyện X', tinhThanh: 'Tỉnh Z' } }
+                    ]
+                },
+                '2025-05-27': {
+                    session: 'B',
+                    workers: [
+                        { maCongNhan: 'CN003', tenCongNhan: 'Lê Thị C', tenLo: 'Lô B', diaChiLo: { thonXom: 'Thôn 2', phuongXa: 'Xã B', quanHuyen: 'Huyện Y', tinhThanh: 'Tỉnh Z' } }
+                    ]
+                },
+                '2025-05-28': {
+                    session: 'C',
+                    workers: [
+                        { maCongNhan: 'CN005', tenCongNhan: 'Hoàng Văn E', tenLo: 'Lô C', diaChiLo: { thonXom: 'Thôn 3', phuongXa: 'Xã C', quanHuyen: 'Huyện Z', tinhThanh: 'Tỉnh Z' } }
+                    ]
+                },
+                '2025-05-29': {
+                    session: 'D',
+                    workers: [
+                        { maCongNhan: 'CN006', tenCongNhan: 'Vũ Thị F', tenLo: 'Lô D', diaChiLo: { thonXom: 'Thôn 4', phuongXa: 'Xã D', quanHuyen: 'Huyện W', tinhThanh: 'Tỉnh Z' } }
+                    ]
+                },
+                '2025-05-30': {
+                    session: 'A',
+                    workers: [
+                        { maCongNhan: 'CN001', tenCongNhan: 'Nguyễn Văn A', tenLo: 'Lô A', diaChiLo: { thonXom: 'Thôn 1', phuongXa: 'Xã A', quanHuyen: 'Huyện X', tinhThanh: 'Tỉnh Z' } }
+                    ]
+                },
+                '2025-05-31': {
+                    session: 'B',
+                    workers: [
+                        { maCongNhan: 'CN003', tenCongNhan: 'Lê Thị C', tenLo: 'Lô B', diaChiLo: { thonXom: 'Thôn 2', phuongXa: 'Xã B', quanHuyen: 'Huyện Y', tinhThanh: 'Tỉnh Z' } }
+                    ]
+                },
+                '2025-06-01': {
+                    session: 'C',
+                    workers: [
+                        { maCongNhan: 'CN005', tenCongNhan: 'Hoàng Văn E', tenLo: 'Lô C', diaChiLo: { thonXom: 'Thôn 3', phuongXa: 'Xã C', quanHuyen: 'Huyện Z', tinhThanh: 'Tỉnh Z' } }
+                    ]
+                }
+            };
+
+            const data = sessionData[dateStr] || { session: session, workers: [] };
+            if (data.session !== session) return;
+
+            $('#detailDate').text(dateStr);
+            $('#detailSession').text(`Phiên ${data.session}`);
+            $('#detailTableBody').empty();
+
+            if (data.workers.length > 0) {
+                data.workers.forEach(worker => {
+                    $('#detailTableBody').append(`
+                        <tr>
+                            <td>${worker.maCongNhan}</td>
+                            <td>${worker.tenCongNhan}</td>
+                            <td>${worker.tenLo}</td>
+                            <td>${worker.diaChiLo.thonXom}</td>
+                            <td>${worker.diaChiLo.phuongXa}</td>
+                            <td>${worker.diaChiLo.quanHuyen}</td>
+                            <td>${worker.diaChiLo.tinhThanh}</td>
+                        </tr>
+                    `);
+                });
+            } else {
+                $('#detailTableBody').append('<tr><td colspan="7">Chưa có dữ liệu</td></tr>');
+            }
+
+            $('#sessionDetailModal').modal('show');
+        }
+    </script>
+</body>
+</html>

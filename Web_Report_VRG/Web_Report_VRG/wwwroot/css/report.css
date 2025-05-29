@@ -1,0 +1,335 @@
+﻿/* Biến CSS để quản lý màu sắc và kích thước */
+:root {
+    --primary-color: #007bff;
+    --primary-dark: #0056b3;
+    --secondary-color: #e9ecef;
+    --filter-bg: #DCF7DE;
+    --accordion-bg: #E4F3F4;
+    --text-dark: #343a40;
+    --text-light: #fff;
+    --text-brown: #8B4513;
+    --border-color: #dee2e6;
+    --shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    --border-radius: 8px;
+    --padding: 1.5rem;
+    --font-family: 'Roboto', sans-serif;
+}
+
+/* Global Styles */
+body {
+    font-family: var(--font-family);
+    background-color: #f4f6f9;
+    color: var(--text-dark);
+}
+
+/* Container chính */
+.thong-ke-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: var(--padding);
+}
+
+/* Instructions Section (Phần lọc) */
+.instructions-section {
+    background-color: var(--filter-bg);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    margin-bottom: var(--padding);
+    box-shadow: var(--shadow);
+    border: 1px solid #b0e0e6;
+}
+
+    .instructions-section h5 {
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1rem;
+    }
+
+    .instructions-section .note {
+        font-size: 0.9rem;
+        color: #6c757d;
+        margin-top: 1rem;
+    }
+
+/* Đồng bộ input và select */
+.form-input-custom {
+    height: 38px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border: 1px solid #b0e0e6;
+    border-radius: 6px;
+    background-color: #e6f3fa;
+}
+
+/* Nút Tìm kiếm */
+.btn-search {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    border: none;
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background 0.3s ease;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .btn-search i {
+        margin-right: 5px;
+    }
+
+    .btn-search:hover {
+        background: linear-gradient(135deg, var(--primary-dark), #003087);
+    }
+
+/* Accordion */
+.accordion {
+    --bs-accordion-bg: var(--accordion-bg);
+    --bs-accordion-active-bg: #d1f0d1;
+    --bs-accordion-btn-focus-border-color: none;
+    --bs-accordion-btn-focus-box-shadow: none;
+}
+
+.accordion-item {
+    border: 1px solid #b0e0e6;
+    border-radius: var(--border-radius);
+    margin-bottom: var(--padding);
+    box-shadow: var(--shadow);
+}
+
+.accordion-button {
+    background-color: var(--accordion-bg) !important;
+    color: var(--text-brown);
+    font-weight: 600;
+    padding: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+    .accordion-button:not(.collapsed) {
+        background-color: var(--bs-accordion-active-bg) !important;
+        color: var(--text-brown);
+    }
+
+    .accordion-button:focus {
+        box-shadow: none;
+        border-color: #b0e0e6;
+    }
+
+    .accordion-button .text-brown {
+        color: var(--text-brown) !important;
+    }
+
+    .accordion-button .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+.accordion-body {
+    padding: var(--padding);
+}
+
+/* Card bên trong Accordion */
+.card {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    margin-bottom: var(--padding);
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.card-arrow {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+    .card-arrow div {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: inherit;
+        clip-path: polygon(0 0, 100% 0, 0 100%);
+        transform: rotate(45deg);
+        border: 1px solid var(--border-color);
+    }
+
+.card-arrow-top-left {
+    top: -10px;
+    left: -10px;
+}
+
+.card-arrow-top-right {
+    top: -10px;
+    right: -10px;
+}
+
+.card-arrow-bottom-left {
+    bottom: -10px;
+    left: -10px;
+}
+
+.card-arrow-bottom-right {
+    bottom: -10px;
+    right: -10px;
+}
+
+/* Biểu đồ */
+.chart-container {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    margin-bottom: var(--padding);
+    min-height: 400px;
+    box-shadow: var(--shadow);
+    display: block;
+}
+
+    .chart-container canvas {
+        max-height: 400px;
+        width: 100%;
+    }
+
+/* Table responsive */
+.table-responsive {
+    max-height: 500px; /* Tăng chiều cao tối đa để tránh dài vô hạn */
+    overflow-y: auto; /* Cuộn dọc khi vượt quá chiều cao */
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: var(--padding);
+    background: #fff;
+    box-shadow: var(--shadow);
+    margin: var(--padding) 0;
+}
+
+#table_main {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 0.9rem;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+    #table_main thead th {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: var(--text-light);
+        font-weight: 600;
+        padding: 10px 8px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 2px solid var(--primary-dark);
+        text-transform: uppercase;
+        font-size: 0.85rem;
+    }
+
+    #table_main tbody tr {
+        transition: background-color 0.2s ease;
+    }
+
+        #table_main tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+
+        #table_main tbody tr:hover {
+            background-color: #e9ecef;
+        }
+
+    #table_main td {
+        padding: 8px;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-dark);
+    }
+
+    #table_main tbody td.text-center {
+        text-align: center;
+    }
+
+    #table_main tbody td.text-left {
+        text-align: left;
+    }
+
+    #table_main tfoot td {
+        background-color: var(--secondary-color);
+        font-weight: bold;
+        color: var(--primary-dark);
+        padding: 10px 8px;
+        border-top: 2px solid var(--primary-dark);
+        position: sticky;
+        bottom: 0;
+        z-index: 10;
+        font-size: 0.9rem;
+    }
+
+/* Table tổng sản lượng, tổng mủ */
+.table.tong-san-luong,
+.table.tong-mu {
+    max-width: 400px;
+    margin: var(--padding) auto;
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+    .table.tong-san-luong thead,
+    .table.tong-mu thead {
+        background: var(--secondary-color);
+    }
+
+    .table.tong-san-luong td,
+    .table.tong-mu td {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+
+/* DataTable Controls */
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_info {
+    font-size: 0.875rem;
+    color: #495057;
+    margin: 10px 0;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border-radius: 6px;
+    color: var(--primary-color);
+    margin: 0 4px;
+    padding: 6px 12px;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+}
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: var(--text-light);
+        border-color: var(--primary-color);
+    }
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}

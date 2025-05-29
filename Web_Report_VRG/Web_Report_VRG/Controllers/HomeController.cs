@@ -17,6 +17,10 @@ namespace Web_Report_VRG.Controllers
         {
             return View();
         }
+        public IActionResult LichCao()
+        {
+            return View();
+        }
 
         public IActionResult Privacy()
         {

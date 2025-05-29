@@ -1,98 +1,90 @@
-﻿<!-- Audio notify -->
-<audio src="/sounds/sound1.ogg" id="audio_success"></audio>
-<audio src="/sounds/sound6.ogg" id="audio_warning"></audio>
-<audio src="/sounds/sound5.ogg" id="audio_error"></audio>
-<audio src="/sounds/sound7.ogg" id="audio_info"></audio>
-<audio src="/sounds/sound4.ogg" id="audio_question"></audio>
+﻿<!-- Đoạn code bổ sung từ bạn -->
+    <!-- Audio notify -->
+    <audio src="/sounds/sound1.ogg" id="audio_success"></audio>
+    <audio src="/sounds/sound6.ogg" id="audio_warning"></audio>
+    <audio src="/sounds/sound5.ogg" id="audio_error"></audio>
+    <audio src="/sounds/sound7.ogg" id="audio_info"></audio>
+    <audio src="/sounds/sound4.ogg" id="audio_question"></audio>
 
-<script>
-    //Script check state cookies
-    if (!navigator.cookieEnabled) {
-        document.getElementById("alert-cookies").style.display = "block";
-    }
+    <script>
+        // Script check state cookies
+        if (!navigator.cookieEnabled) {
+            document.getElementById("alert-cookies").style.display = "block";
+        }
+    </script>
 
-    //Disabled iframe out site
-    //if (top.location != self.location) { top.location = self.location; }
-</script>
+    <!-- Template js -->
+     <script src="~/assets/admin/js/vendor.min.js"></script> 
+     <script src="~/assets/admin/js/app.min.js"></script> 
 
-<!-- Template js -->
-<script src="~/assets/admin/js/vendor.min.js"></script>
-<script src="~/assets/admin/js/app.min.js"></script>
+    <!-- Other lib -->
+    <script src="~/lib/izi-toast-mater/js/iziToast.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
+    <script src="~/lib/moment/min/moment.min.js"></script>
+    <script src="~/lib/particles/particles.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-<!-- Other lib-->
-<script src="~/lib/izi-toast-mater/js/iziToast.min.js"></script>
-<script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
-<script src="~/lib/moment/min/moment.min.js"></script>
-<script src="~/lib/particles/particles.min.js"></script>
+    <!-- Utility lib js -->
+    <script src="~/js/utility_lib.js" asp-append-version="true"></script>
 
-<!-- Utility lib js-->
-<script src="~/js/utility_lib.js" asp-append-version="true"></script>
+    <!-- Common js -->
+    <script src="~/controllers/common.js" asp-append-version="true"></script>
+    <script src="~/controllers/system_config.js" asp-append-version="true"></script>
 
-<!-- Common js-->
-<script src="~/controllers/common.js" asp-append-version="true"></script>
-<script src="~/controllers/system_config.js" asp-append-version="true"></script>
-
-<!-- Script common js-->
-<script>
-    // We are "offline".
-    window.addEventListener("offline", () => {
-        // Show "No Internet Connection." message.
-        ShowToastNoti('', '', 'Không có kết nối Internet!', 2000, 'bottomLeft', 'bi bi-wifi-off text-dark');
-    });
-
-    // When we back "online".
-    window.addEventListener("online", () => {
-        // Show "Back online" message.
-        ShowToastNoti('', '', 'Đã khôi phục kết nối Internet!', 2000, 'bottomLeft', 'bi bi-wifi text-success');
-    });
-
-    $(document).ready(function () {
-
-        //Hide progress top page
-        setTimeout(function () {
-            Pace.stop();
-        }, 500);
-
-        //Ping to living
-        setInterval(function () {
-            $.ajax({
-                url: "/Home/Ping",
-                cache: false
-            });
-        }, 15 * 60 * 1000); //15 minutes
-
-        //Set datetimePicker language default
-        //$.datetimepicker.setLocale('vi');
-
-        //Init dropdown menu
-        $('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
-            if (!$(this).next().hasClass('show')) {
-                $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
-            }
-            var $subMenu = $(this).next(".dropdown-menu");
-            $subMenu.toggleClass('show');
-            return false;
+    <script>
+        // We are "offline".
+        window.addEventListener("offline", () => {
+            ShowToastNoti('', '', 'Không có kết nối Internet!', 2000, 'bottomLeft', 'bi bi-wifi-off text-dark');
         });
 
-    });
+        // When we back "online".
+        window.addEventListener("online", () => {
+            ShowToastNoti('', '', 'Đã khôi phục kết nối Internet!', 2000, 'bottomLeft', 'bi bi-wifi text-success');
+        });
 
-    function ShowAlertIsDeveloping(e) {
-        e.preventDefault();
-        swal.fire("Chức năng này đang trong quá trình phát triển. Quay lại sau bạn nhé!!!", '', 'info');
-    }
+        $(document).ready(function () {
+            // Hide progress top page
+            setTimeout(function () {
+                Pace.stop();
+            }, 500);
 
-     function ShowNotAccess(e) {
-        e.preventDefault();
-        swal.fire("Bạn chưa được phân quyền vào danh mục này", '', 'info');
-    }
-</script>
+            // Ping to living
+            setInterval(function () {
+                $.ajax({
+                    url: "/Home/Ping",
+                    cache: false
+                });
+            }, 15 * 60 * 1000); // 15 minutes
 
-<script>
-    $("#sidebar a").each(function () {
-        var pageUrl = window.location.href.split(/[?#]/)[0];
-        if (this.href == pageUrl) {
-            $(this).parent().addClass("active");
-            $(this).parent().parents('.menu-item').addClass("active");
+            // Init dropdown menu
+            $('.dropdown-menu a.dropdown-toggle').on('click', function (e) {
+                e.stopPropagation(); // Ngăn lan truyền
+                if (!$(this).next().hasClass('show')) {
+                    $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+                }
+                var $subMenu = $(this).next(".dropdown-menu");
+                $subMenu.toggleClass('show');
+                return false;
+            });
+        });
+
+        function ShowAlertIsDeveloping(e) {
+            e.preventDefault();
+            swal.fire("Chức năng này đang trong quá trình phát triển. Quay lại sau bạn nhé!!!", '', 'info');
         }
-    });
-</script>
+
+        function ShowNotAccess(e) {
+            e.preventDefault();
+            swal.fire("Bạn chưa được phân quyền vào danh mục này", '', 'info');
+        }
+    </script>
+
+    <script>
+        $("#sidebar a").each(function () {
+            var pageUrl = window.location.href.split(/[?#]/)[0];
+            if (this.href == pageUrl) {
+                $(this).parent().addClass("active");
+                $(this).parent().parents('.menu-item').addClass("active");
+            }
+        });
+    </script>
