@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Web_Report_VRG")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0d19e5775608ecf006920f66c1d2e200e6804415")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2894b8dc215efca011a3f0b9931d887433db2c91")]
 [assembly: System.Reflection.AssemblyProductAttribute("Web_Report_VRG")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Web_Report_VRG")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
