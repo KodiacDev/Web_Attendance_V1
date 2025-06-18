@@ -20,12 +20,8 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/a/Desktop/Source/Web_Report_VRG/Web_Report_VRG/Web_Report_VRG/Views/LichCao/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcTGljaENhb1xJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/a/Desktop/Source/Web_Report_VRG/Web_Report_VRG/Web_Report_VRG/Views/Report/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUmVwb3J0XEluZGV4LmNzaHRtbA==
+[C:/Users/a/Desktop/Source/Web_Report_VRG/Web_Report_VRG/Web_Report_VRG/Views/Home/ViewSheet.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxWaWV3U2hlZXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/a/Desktop/Source/Web_Report_VRG/Web_Report_VRG/Web_Report_VRG/Views/Shared/Error.cshtml]
